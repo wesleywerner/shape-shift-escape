@@ -1,7 +1,7 @@
 -- Begin defining our game stage, a jail cell
 local cell = {}
 
-function cell.setup ()
+function cell.setup (self)
 
     -- Clear the stage
     slime:reset()
@@ -36,6 +36,7 @@ function cell.setup ()
     slime.inventoryChanged = cell.inventoryChanged
     slime.animationLooped = cell.animationLooped
     
+    cell.openCellDoor ()
 end
 
 function cell.addEgoActor (x, y)
@@ -97,10 +98,58 @@ function cell.addEgoActor (x, y)
 end
 
 
+function cell.addGuard (name)
+    local actor = slime:actor(name, 35, 45)
+    actor.movedelay = 0.05
+    local anim = actor:tileset("images/guard.png", {w=12, h=12})
+    -- Idle animation
+    -- The idle animation plays when the actor is not walking or talking:
+    -- a simple two-frame animation: Open eyes, and blink.
+    
+    local southFrames = {'11-10', 1}
+    local southDelays = {3, 0.2}
+    local eastFrames = {'3-2', 1}
+    local eastDelays = {3, 0.2}
+    local northFrames = {18, 1}
+    local northDelays = 1
+    
+    anim:define("idle south", southFrames, southDelays)
+    anim:define("idle west", eastFrames, eastDelays):flip()
+    anim:define("idle north", northFrames, northDelays)
+    anim:define("idle east", eastFrames, eastDelays)
+
+    -- Walk animation
+    southFrames = {'11-14', 1}
+    southDelays = 0.2
+    eastFrames = {'6-3', 1}
+    eastDelays = 0.2
+    northFrames = {'18-21', 1}
+    northDelays = 0.2
+    
+    anim:define("walk south", southFrames, southDelays)
+    anim:define("walk west", eastFrames, eastDelays):flip()
+    anim:define("walk north", northFrames, northDelays)
+    anim:define("walk east", eastFrames, eastDelays)
+
+    -- Talk animation
+    southFrames = {'15-17', 1}
+    southDelays = 0.2
+    eastFrames = {'7-9', 1}
+    eastDelays = 0.2
+    northFrames = {'15-17', 1}
+    northDelays = 0.2
+
+    anim:define("talk south", southFrames, southDelays)
+    anim:define("talk west", eastFrames, eastDelays):flip()
+    anim:define("talk north", northFrames, northDelays)
+    anim:define("talk east", eastFrames, eastDelays)
+end
+
+
 function cell.addCellDoor (x, y)
 
     -- Add the door as an actor
-    local cellDoor = slime:actor("door", x, y)
+    cell.door = slime:actor("door", x, y)
 
     -- Sprite frames
     local frameWidth, frameHeight = 9, 30
@@ -112,27 +161,55 @@ function cell.addCellDoor (x, y)
     local openingFrames = {"1-31", 1}
     local closingFrames = {"31-1", 1}
     
-    local doorAnim = cellDoor:tileset("images/cell-door.png", {w=9, h=30})
+    local doorAnim = cell.door:tileset("images/cell-door.png", {w=9, h=30})
     doorAnim:define("closing", closingFrames, animationDelay)
     doorAnim:define("closed", closedFrame)
     doorAnim:define("opening", openingFrames, animationDelay)
     doorAnim:define("open", openFrame)
-        
+    
     -- Start off closed
     slime:setAnimation("door", "closed")
+    
+    -- Create a light above the door
+    cell.light = slime:actor("light", 49, 19)
+    cell.light.nozbuffer = true
+    cell.light:setImage("images/cell-light-red.png")
 
 end
 
 
 function cell.openCellDoor ()
-    slime:setAnimation("door", "opening")
-    slime:floor("images/cell-floor-open.png")
+    
+    local chain = slime:chain()
+    chain:image("light", "images/cell-light-green.png")
+    chain:move("ego", "light")
+    chain:move("ego", {x=90, y=47})
+    chain:turn("ego", "west")
+    chain:wait(1)
+    chain:anim("door", "opening")
+    chain:floor("images/cell-floor-open.png")
+    chain:func(cell.addGuard, {"guard 1"})
+    chain:func(cell.addGuard, {"guard 2"})
+    chain:move("guard 1", {x=53, y=44})
+    chain:move("guard 1", {x=48, y=53})
+    chain:turn("guard 1", "east")
+    chain:move("guard 2", {x=53, y=44})
+    chain:move("guard 2", {x=62, y=38})
+    chain:turn("guard 2", "east")
+    chain:talk("guard 1", "MONSTER!")
+    chain:talk("guard 2", "TIME FOR THE TESTS, MONSTER!")
+    chain:talk("guard 1", "MOVE IT!")
+        
+    slime:hotspot("exit", 0, 24, 55, 27)
+     
+--        addScreenRegion (cellExit, 0, 32, 45, 50, 0, 0, WEST);
 end
 
 
 function cell.closeCellDoor ()
     slime:setAnimation("door", "closing")
     slime:floor("images/cell-floor-closed.png")
+    cell.light:setImage("images/cell-light-red.png")
 end
 
 
@@ -153,8 +230,9 @@ function cell.pickUpDust ()
     slime:bagInsert("ego", 
         { ["name"] = "cement dust", ["image"] = "images/inv-dust.png" })
     slime.actors["dust"] = nil
-    slime:addSpeech("ego", "This dust can blind eyeballs for a short time.")
-    helper:waitForSpeech(cell.openCellDoor)
+    local chain = slime:chain()
+    chain:talk("ego", "This dust can blind eyeballs for a short time.")
+    chain:func(cell.openCellDoor)
 end
 
 
@@ -195,6 +273,10 @@ function cell.callback (event, object)
         
         if object.name == "dust" then
             cell.pickUpDust()
+        end
+        
+        if object.name == "exit" then
+            slime:moveActor("ego", 10, 45)
         end
     
     end
