@@ -103,7 +103,9 @@ end
 -- Position bag buttons
 function slime.inventoryChanged (bag)
     slime.bagButtons = { }
+    local xpos = 10
     for counter, item in pairs(slime:bagContents("ego")) do
-        slime:bagButton(item.name, item.image, counter * 10, game.bagY)
+        slime:bagButton(item.name, item.image, xpos, game.bagY)
+        xpos = xpos + item.image:getWidth() + 4
     end
 end
