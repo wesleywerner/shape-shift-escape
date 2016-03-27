@@ -77,7 +77,9 @@ function love.mousepressed (x, y, button)
         if (y > game.bagY) then
             local button = slime:getObjects(x, y)
             if button then
-                slime:setCursor(button[1].name, button[1].image, scale, 0, 0)
+                local cursorSize = { button[1].image:getDimensions() }
+                slime:setCursor(button[1].name, button[1].image, scale, 
+                    cursorSize[1]/2, cursorSize[2]/2)
             end
         else
             if slime:someoneTalking() then
