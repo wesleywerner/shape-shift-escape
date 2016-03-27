@@ -275,11 +275,6 @@ function cell.callback (event, object)
             slime:addSpeech("ego", "I see a hole in the wall")
         end
         
-        -- Set the cursor when interacting on bag items
-        if object.name == "spoon" then
-            slime:setCursor(object.name, object.image, scale, 0, 0)
-        end
-        
         if object.name == "dust" then
             cell.pickUpDust()
         end
@@ -295,10 +290,14 @@ function cell.callback (event, object)
             slime:addSpeech("ego", "The spoon won't open this door")
         end
         if object.name == "hole" then
-            slime:turnActor("ego", "east")
-            slime:setAnimation("ego", "dig")
-            cell.addDustAnimation()
-            slime:setCursor()
+            if not cell.dug then
+                cell.dug = true
+                game.canmove = false
+                slime:turnActor("ego", "east")
+                slime:setAnimation("ego", "dig")
+                cell.addDustAnimation()
+                slime:setCursor()
+            end
         end
     end
     
@@ -324,6 +323,7 @@ function cell.animationLooped (actor, key, counter)
     if actor == "dust" then
         slime:setAnimation("dust", "still")
         slime:setAnimation("ego", nil)
+        game.canmove = true
     end
     
 end
