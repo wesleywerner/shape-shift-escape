@@ -1,10 +1,10 @@
 slime = require("slime")
 helper = require("helper")
 cell = require("cell")
-game = {}
-
--- Position to draw bag items. Clicks below this point skip actor movement
-bagPosition = 86
+game = {
+    canmove = true,
+    bagY = 86
+    }
 
 
 -- Loads the given game stage
@@ -74,14 +74,19 @@ function love.mousepressed (x, y, button)
     if button == "l" then
     
         -- The point is in our bag inventory area
-        if (y > bagPosition) then 
-            slime:interact(x, y)
+        if (y > game.bagY) then
+            local button = slime:getObjects(x, y)
+            if button then
+                slime:setCursor(button[1].name, button[1].image, scale, 0, 0)
+            end
         else
             if slime:someoneTalking() then
                 slime:skipSpeech()
             else
                 -- Move Ego then interact with any objects
-                slime:moveActor("ego", x, y)
+                if game.canmove then
+                    slime:moveActor("ego", x, y)
+                end
             end
         end
 
@@ -95,3 +100,10 @@ function love.mousepressed (x, y, button)
 end
 
 
+-- Position bag buttons
+function slime.inventoryChanged (bag)
+    slime.bagButtons = { }
+    for counter, item in pairs(slime:bagContents("ego")) do
+        slime:bagButton(item.name, item.image, counter * 10, game.bagY)
+    end
+end

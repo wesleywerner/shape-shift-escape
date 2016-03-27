@@ -33,10 +33,13 @@ function cell.setup (self)
     
     -- Hook into the slime callbacks
     slime.callback = cell.callback
-    slime.inventoryChanged = cell.inventoryChanged
     slime.animationLooped = cell.animationLooped
     
-    cell.openCellDoor ()
+    local chain = slime:chain()
+    chain:wait(1)
+    chain:talk("ego", "I must get out of here!")
+
+--    cell.openCellDoor ()
 end
 
 function cell.addEgoActor (x, y)
@@ -60,7 +63,7 @@ function cell.addEgoActor (x, y)
     local westDelays = {3, 0.2}
     local northFrames = {18, 1}
     local northDelays = 1
-    
+        
     egoAnim:define("idle south", southFrames, southDelays)
     egoAnim:define("idle west", westFrames, westDelays)
     egoAnim:define("idle north", northFrames, northDelays)
@@ -180,6 +183,8 @@ end
 
 function cell.openCellDoor ()
     
+    cell.doorOpen = true
+    
     local chain = slime:chain()
     chain:image("light", "images/cell-light-green.png")
     chain:move("ego", "light")
@@ -199,7 +204,7 @@ function cell.openCellDoor ()
     chain:talk("guard 1", "MONSTER!")
     chain:talk("guard 2", "TIME FOR THE TESTS, MONSTER!")
     chain:talk("guard 1", "MOVE IT!")
-        
+    
     slime:hotspot("exit", 0, 24, 55, 27)
      
 --        addScreenRegion (cellExit, 0, 32, 45, 50, 0, 0, WEST);
@@ -255,7 +260,11 @@ function cell.callback (event, object)
     end
     
     if event == "interact" then
-    
+        
+        if object.name == "door" and not cell.doorOpen then
+            slime:addSpeech("ego", "I am locked in this cell.")
+        end
+        
         -- give ego a bowl and a spoon inventory items
         if object.name == "bowl and spoon" then
             cell.pickUpSpoon()
@@ -293,16 +302,6 @@ function cell.callback (event, object)
         end
     end
     
-end
-
-
--- Clear and reposition the clickable buttons for the bag (inventory)
--- when it has items added or removed.
-function cell.inventoryChanged (bag)
-    slime.bagButtons = { }
-    for counter, item in pairs(slime:bagContents("ego")) do
-        slime:bagButton(item.name, item.image, counter * 10, bagPosition)
-    end
 end
 
 
