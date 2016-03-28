@@ -27,6 +27,8 @@ end
 function love.load ()
     -- Nearest image interpolation (pixel graphics, no anti-aliasing)
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+    slime.settings["speech font"] = love.graphics.newFont(8)
+    slime.settings["status font"] = love.graphics.newFont(8)
     -- Load the first stage
     game:warp(cell)
 end

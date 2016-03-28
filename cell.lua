@@ -35,11 +35,9 @@ function cell.setup (self)
     slime.callback = cell.callback
     slime.animationLooped = cell.animationLooped
     
---    local chain = slime:chain()
---    chain:wait(1)
---    chain:say("ego", "I must get out of here!")
+    slime:say("ego", "I must get out of here!")
 
-    cell.pickUpDust()
+    --cell.pickUpDust()
     --cell.throwDust()
     
 end
