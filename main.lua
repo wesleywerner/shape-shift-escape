@@ -2,7 +2,7 @@ slime = require("slime")
 helper = require("helper")
 cell = require("cell")
 game = {
-    canmove = true,
+    isbusy = false,
     bagY = 86
     }
 
@@ -11,6 +11,16 @@ game = {
 function game.warp(self, stage)
     self.stage = stage
     stage:setup()
+end
+
+
+function game.busy()
+    game.isbusy = true
+end
+
+
+function game.unbusy()
+    game.isbusy = false
 end
 
 
@@ -66,6 +76,11 @@ end
 -- Left clicking moves our Ego actor, and interacts with objects.
 function love.mousepressed (x, y, button)
 
+    if game.isbusy then
+        slime:skipSpeech()
+        return
+    end
+    
     -- Adjust for scale
     x = math.floor(x / scale)
     y = math.floor(y / scale)
@@ -86,7 +101,7 @@ function love.mousepressed (x, y, button)
                 slime:skipSpeech()
             else
                 -- Move Ego then interact with any objects
-                if game.canmove then
+                if not slime:interact(x, y) then
                     slime:moveActor("ego", x, y)
                 end
             end
