@@ -103,9 +103,9 @@ function love.mousepressed (x, y, button)
                 slime:skipSpeech()
             else
                 -- Move Ego then interact with any objects
-                if not slime:interact(x, y) then
+                --if not slime:interact(x, y) then
                     slime:moveActor("ego", x, y)
-                end
+                --end
             end
         end
 

@@ -39,7 +39,7 @@ function cell.setup (self)
 
     --cell.pickUpDust()
     --cell.throwDust()
-    
+        
 end
 
 function cell.addEgoActor (x, y)
@@ -271,20 +271,27 @@ function cell.openCellDoor ()
     chain:say("guard 1", "MONSTER!")
     chain:say("guard 2", "TIME FOR THE TESTS, MONSTER!")
     chain:say("guard 1", "MOVE IT!")
+    chain:func(cell.addExitHotspot)
     chain:func(game.unbusy)
     
 end
 
 
 function cell.addExitHotspot ()
-    slime:hotspot("exit", 0, 24, 54, 27)
+    slime:hotspot("exit", 0, 24, 35, 27)
 end
 
 
 function cell.closeCellDoor ()
-    slime:setAnimation("door", "closing")
-    slime:floor("images/cell-floor-closed.png")
-    cell.light:setImage("images/cell-light-red.png")
+    local chain = slime:chain()
+    chain:floor("images/cell-floor-closed.png")
+    chain:anim("door", "closing", true)
+    chain:image("light", "images/cell-light-red.png")
+    chain:sound("sounds/unlock.wav")
+    
+--    slime:setAnimation("door", "closing")
+--    slime:floor("images/cell-floor-closed.png")
+--    cell.light:setImage("images/cell-light-red.png")
 end
 
 
@@ -325,9 +332,9 @@ function cell.callback (event, object)
 
     slime:log(event .. " on " .. object.name)
 
---    if (event == "moved" and object.name == "ego") then
---        slime:interact(object.clickedX, object.clickedY)
---    end
+    if (event == "moved" and object.name == "ego") then
+        slime:interact(object.clickedX, object.clickedY)
+    end
     
     if event == "interact" then
         
@@ -425,16 +432,14 @@ function cell.throwDust ()
     chain:turn("ego", "west");
     
     -- throw dust
-    chain:anim("ego", "throw dust")
-    chain:wait(slime:animationDuration("ego", "throw dust"))
+    chain:anim("ego", "throw dust", true)
     
     -- guard rubs eyes
     chain:anim("guard 1", "rub eyes")
     
     -- shape shift
-    chain:anim("ego", "shift to guard")
+    chain:anim("ego", "shift to guard", true)
     chain:func(cell.setGuardCostume, {slime.actors["ego"]})
-    chain:wait(slime:animationDuration("ego", "shift to guard"))
     
     -- move ego next to top guard
     chain:move("guard 2", {x=56, y=45})
@@ -487,21 +492,31 @@ function cell.throwDust ()
     chain:say("guard 2", "GO TELL THE SCIENTISTS OF THIS INCIDENT.")
     chain:say("ego", "RIGHT.")
     
-    chain:func(cell.addExitHotspot)
     chain:func(game.unbusy)
 
 end
 
 
 function cell.exitToHallway()
-    local chain = slime:chain()
-    chain:move("ego", {x=20, y=45})
-    chain:move("guard 2", {x=20, y=45})
-    chain:func(cell.closeCellDoor)
-    chain:wait(0.5)
-    chain:say("guard 1", "CRAP.")
-    chain:wait(3)
-    --chain:func(game.warp, {game, hallway})
+    if not cell.exiting then
+        cell.exiting = true
+        local chain = slime:chain()
+        game.busy()
+        if game.egoshape == "guard" then
+            chain:move("guard 2", {x=10, y=45})
+            chain:func(cell.closeCellDoor)
+            chain:wait(1)
+            chain:say("guard 1", "CRAP.")
+            chain:wait(3)
+            --chain:func(game.warp, {game, hallway})
+        else
+            chain:move("guard 2", {x=30, y=46})
+            chain:move("guard 1", {x=30, y=46})
+            chain:func(cell.closeCellDoor)
+            chain:wait(0.5)
+            --chain:func(game.warp, {game, fail})
+        end
+    end
 end
 
 
