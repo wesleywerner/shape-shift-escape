@@ -38,8 +38,7 @@ function cell.setup (self)
     slime:say("ego", "I must get out of here!")
 
     --cell.pickUpDust()
-    --cell.throwDust()
-        
+
 end
 
 function cell.addEgoActor (x, y)
@@ -59,16 +58,17 @@ function cell.setEgoMonsterCostume ()
     local ego = slime.actors["ego"]
     
     -- Throw dust
-    local dustAnim = ego:tileset("images/ego-throw.png", {w=22, h=12})
-    dustAnim:define("throw dust",
-        {"1-12", 1},
-        0.1,
-        {[1] = "sounds/dust.wav"},
-        {x=-10, y=0}
-        ):flip()
+    local tiles = ego:tileset("images/ego-throw.png", {w=22, h=12})
+    
+    tiles:define("throw dust")
+        :frames({"1-12", 1})
+        :delays(0.1)
+        :sounds({[1] = "sounds/dust.wav"})
+        :offset(-10, 0)
+        :flip()
 
     -- create a new animation pack for ego using a tileset of 12x12 frames
-    local egoAnim = ego:tileset("images/ego.png", {w=12, h=12})
+    tiles = ego:tileset("images/ego.png", {w=12, h=12})
     
     -- Idle animation
     -- The idle animation plays when the actor is not walking or talking:
@@ -80,11 +80,11 @@ function cell.setEgoMonsterCostume ()
     local westDelays = {3, 0.2}
     local northFrames = {18, 1}
     local northDelays = 1
-        
-    egoAnim:define("idle south", southFrames, southDelays)
-    egoAnim:define("idle west", westFrames, westDelays)
-    egoAnim:define("idle north", northFrames, northDelays)
-    egoAnim:define("idle east", westFrames, westDelays):flip()
+    
+    tiles:define("idle south"):frames(southFrames):delays(southDelays)
+    tiles:define("idle west"):frames(westFrames):delays(westDelays)
+    tiles:define("idle north"):frames(northFrames):delays(northDelays)
+    tiles:define("idle east"):frames(westFrames):delays(westDelays):flip()
 
     -- Walk animation
     southFrames = {'11-14', 1}
@@ -94,10 +94,10 @@ function cell.setEgoMonsterCostume ()
     northFrames = {'18-21', 1}
     northDelays = 0.2
     
-    egoAnim:define("walk south", southFrames, southDelays)
-    egoAnim:define("walk west", westFrames, westDelays)
-    egoAnim:define("walk north", northFrames, northDelays)
-    egoAnim:define("walk east", westFrames, westDelays):flip()
+    tiles:define("walk south"):frames(southFrames):delays(southDelays)
+    tiles:define("walk west"):frames(westFrames):delays(westDelays)
+    tiles:define("walk north"):frames(northFrames):delays(northDelays)
+    tiles:define("walk east"):frames(westFrames):delays(westDelays):flip()
 
     -- Talk animation
     southFrames = {'15-17', 1}
@@ -107,19 +107,24 @@ function cell.setEgoMonsterCostume ()
     northFrames = {'15-17', 1}
     northDelays = 0.2
 
-    egoAnim:define("talk south", southFrames, southDelays)
-    egoAnim:define("talk west", westFrames, westDelays)
-    egoAnim:define("talk north", northFrames, northDelays)
-    egoAnim:define("talk east", westFrames, westDelays):flip()
+    tiles:define("talk south"):frames(southFrames):delays(southDelays)
+    tiles:define("talk west"):frames(westFrames):delays(westDelays)
+    tiles:define("talk north"):frames(northFrames):delays(northDelays)
+    tiles:define("talk east"):frames(westFrames):delays(westDelays):flip()
     
     -- Dig with a spoon
-    egoAnim:define("dig", 
-        {"22-25", 1}, 0.2, {[1] = "sounds/dig.wav"}):flip()
+    tiles:define("dig")
+        :frames({"22-25", 1})
+        :delays(0.2)
+        :sounds({[1] = "sounds/dig.wav"})
+        :flip()
     
     -- Shape shift to a guard
-    egoAnim:define("shift to guard", 
-        {"26-37", 1}, 0.2, {[1] = "sounds/shapeshift.wav"},
-        {x=0, y=2})
+    tiles:define("shift to guard")
+        :frames({"26-37", 1})
+        :delays(0.2)
+        :sounds({[1] = "sounds/shapeshift.wav"})
+        :offset(0, 2)
     
 end
 
@@ -132,7 +137,8 @@ end
 
 function cell.setGuardCostume(actor)
 
-    local anim = actor:tileset("images/guard.png", {w=12, h=14})
+    local tiles = actor:tileset("images/guard.png", {w=12, h=14})
+    
     -- Idle animation
     -- The idle animation plays when the actor is not walking or talking:
     -- a simple two-frame animation: Open eyes, and blink.
@@ -144,10 +150,10 @@ function cell.setGuardCostume(actor)
     local northFrames = {18, 1}
     local northDelays = 1
     
-    anim:define("idle south", southFrames, southDelays)
-    anim:define("idle west", eastFrames, eastDelays):flip()
-    anim:define("idle north", northFrames, northDelays)
-    anim:define("idle east", eastFrames, eastDelays)
+    tiles:define("idle south"):frames(southFrames):delays(southDelays)
+    tiles:define("idle west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("idle north"):frames(northFrames):delays(northDelays)
+    tiles:define("idle east"):frames(eastFrames):delays(eastDelays)
 
     -- Walk animation
     southFrames = {'11-14', 1}
@@ -157,10 +163,10 @@ function cell.setGuardCostume(actor)
     northFrames = {'18-21', 1}
     northDelays = 0.2
     
-    anim:define("walk south", southFrames, southDelays)
-    anim:define("walk west", eastFrames, eastDelays):flip()
-    anim:define("walk north", northFrames, northDelays)
-    anim:define("walk east", eastFrames, eastDelays)
+    tiles:define("walk south"):frames(southFrames):delays(southDelays)
+    tiles:define("walk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("walk north"):frames(northFrames):delays(northDelays)
+    tiles:define("walk east"):frames(eastFrames):delays(eastDelays)
 
     -- Talk animation
     southFrames = {'15-17', 1}
@@ -170,10 +176,10 @@ function cell.setGuardCostume(actor)
     northFrames = {'15-17', 1}
     northDelays = 0.2
 
-    anim:define("talk south", southFrames, southDelays)
-    anim:define("talk west", eastFrames, eastDelays):flip()
-    anim:define("talk north", northFrames, northDelays)
-    anim:define("talk east", eastFrames, eastDelays)
+    tiles:define("talk south"):frames(southFrames):delays(southDelays)
+    tiles:define("talk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("talk north"):frames(northFrames):delays(northDelays)
+    tiles:define("talk east"):frames(eastFrames):delays(eastDelaysu)
     
     -- Rub eyes
     eastFrames = {
@@ -184,31 +190,32 @@ function cell.setGuardCostume(actor)
         '24-22', 1,
         }
     eastDelays = 0.2
-    anim:define("rub eyes", eastFrames, eastDelays)
+    tiles:define("rub eyes"):frames(eastFrames):delays(eastDelays)
     
 end
 
 
 function cell.setGuardHandsUpCostume(actor)
 
-    local anim = actor:tileset("images/guard.png", {w=12, h=14})
+    local tiles = actor:tileset("images/guard.png", {w=12, h=14})
     
     local eastFrames = {'28-27', 1}
     local eastDelays = {3, 0.2}
-    anim:define("idle west", eastFrames, eastDelays):flip()
-    anim:define("idle east", eastFrames, eastDelays)
+    
+    tiles:define("idle west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("idle east"):frames(eastFrames):delays(eastDelays)
 
     -- Walk animation
     eastFrames = {'29-31', 1}
     eastDelays = 0.2
-    anim:define("walk west", eastFrames, eastDelays):flip()
-    anim:define("walk east", eastFrames, eastDelays)
+    tiles:define("walk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("walk east"):frames(eastFrames):delays(eastDelays)
 
     -- Talk animation
     eastFrames = {'32-34', 1}
     eastDelays = 0.2
-    anim:define("talk west", eastFrames, eastDelays):flip()
-    anim:define("talk east", eastFrames, eastDelays)
+    tiles:define("talk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("talk east"):frames(eastFrames):delays(eastDelays)
     
 end
 
@@ -219,8 +226,7 @@ function cell.addDoorActor (x, y)
     cell.door = slime:actor("door", x, y)
 
     -- Sprite frames
-    local frameWidth, frameHeight = 9, 30
-    local animationDelay = 0.05
+    local delay = 0.05
     -- A single frame that shows the door as open or closed
     local closedFrame = {1, 1}
     local openFrame = {31, 1}
@@ -229,12 +235,26 @@ function cell.addDoorActor (x, y)
     local closingFrames = {"31-1", 1}
     local soundFrames = {[2] = "sounds/celldooropen.wav"}
     
-    local doorAnim = cell.door:tileset("images/cell-door.png", {w=9, h=30})
-    doorAnim:define("closing", closingFrames, animationDelay, soundFrames)
-    doorAnim:define("closed", closedFrame)
-    doorAnim:define("opening", openingFrames, animationDelay, soundFrames)
-    doorAnim:define("open", openFrame)
-    
+    local tiles = cell.door:tileset("images/cell-door.png", {w=9, h=30})
+    tiles
+        :define("closing")
+        :frames(closingFrames)
+        :delays(delay)
+        :sounds(soundFrames)
+    tiles
+        :define("closed")
+        :frames(closedFrame)
+        :delays(10)
+    tiles
+        :define("opening")
+        :frames(openingFrames)
+        :delays(delay)
+        :sounds(soundFrames)
+    tiles
+        :define("open")
+        :frames(closingFrames)
+        :delays(10)
+
     -- Start off closed
     slime:setAnimation("door", "closed")
     
@@ -320,10 +340,10 @@ end
 
 -- Creates an animation of falling dust where ego digs into the wall
 function cell.addFallingDustActor ()
-    local dustActor = slime:actor("falling dust", 96, 34)
-    local dustAnim = dustActor:tileset("images/dust.png", {w=5, h=6})
-    dustAnim:define("fall", {'1-14', 1}, 0.2)
-    dustAnim:define("still", {14, 1})
+    local actor = slime:actor("falling dust", 96, 34)
+    local tiles = actor:tileset("images/dust.png", {w=5, h=6})
+    tiles:define("fall"):frames({'1-14', 1}):delays(0.2)
+    tiles:define("still"):frames({14, 1}):delays(10)
     slime:setAnimation("falling dust", "fall")
 end
 
@@ -413,6 +433,7 @@ function cell.animationLooped (actor, key, counter)
             slime:setAnimation("ego", nil)
         end
         if key == "shift to guard" then
+            cell.setGuardCostume(slime.actors["ego"])
             slime:setAnimation("ego", nil)
         end
     end
@@ -437,9 +458,8 @@ function cell.throwDust ()
     -- guard rubs eyes
     chain:anim("guard 1", "rub eyes")
     
-    -- shape shift
+    -- shape shift (ego's costume changes to a guard on animation loop)
     chain:anim("ego", "shift to guard", true)
-    chain:func(cell.setGuardCostume, {slime.actors["ego"]})
     
     -- move ego next to top guard
     chain:move("guard 2", {x=56, y=45})
