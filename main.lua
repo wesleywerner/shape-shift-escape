@@ -1,5 +1,7 @@
 slime = require("slime")
 helper = require("helper")
+cast = require("cast")
+costumes = require("costumes")
 cell = require("cell")
 game = {
     isbusy = false,
