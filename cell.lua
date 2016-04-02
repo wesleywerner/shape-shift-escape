@@ -23,7 +23,7 @@ function cell.setup (self)
     cast.ego(70, 50)
     
     -- Add the cell door
-    cell.addDoorActor(50, 49)
+    cast.door(50, 49, "door")
     
     -- Hole in the wall
     local x, y, width, height = 92, 23, 8, 8
@@ -42,55 +42,10 @@ function cell.setup (self)
 end
 
 
-function cell.addDoorActor (x, y)
-
-    -- Add the door as an actor
-    cell.door = slime:actor("door", x, y)
-
-    -- Sprite frames
-    local delay = 0.05
-    -- A single frame that shows the door as open or closed
-    local closedFrame = {1, 1}
-    local openFrame = {31, 1}
-    -- A series of frames that open or close the door
-    local openingFrames = {"1-31", 1}
-    local closingFrames = {"31-1", 1}
-    local soundFrames = {[2] = "sounds/celldooropen.wav"}
-    
-    local tiles = cell.door:tileset("images/cell-door.png", {w=9, h=30})
-    tiles
-        :define("closing")
-        :frames(closingFrames)
-        :delays(delay)
-        :sounds(soundFrames)
-    tiles
-        :define("closed")
-        :frames(closedFrame)
-        :delays(10)
-    tiles
-        :define("opening")
-        :frames(openingFrames)
-        :delays(delay)
-        :sounds(soundFrames)
-    tiles
-        :define("open")
-        :frames(closingFrames)
-        :delays(10)
-
-    -- Start off closed
-    slime:setAnimation("door", "closed")
-    
-    -- Create a light above the door
-    cell.light = slime:actor("light", 49, 19)
-    cell.light.nozbuffer = true
-    cell.light:setImage("images/cell-light-red.png")
-
-end
-
-
 function cell.openCellDoor ()
     
-    cell.doorOpen = true
+    local door = slime.actors["door"]
+    door.open = true
     game.busy()
     
     local chain = slime:chain()
@@ -130,10 +85,6 @@ function cell.closeCellDoor ()
     chain:anim("door", "closing", true)
     chain:image("light", "images/cell-light-red.png")
     chain:sound("sounds/unlock.wav")
-    
---    slime:setAnimation("door", "closing")
---    slime:floor("images/cell-floor-closed.png")
---    cell.light:setImage("images/cell-light-red.png")
 end
 
 
@@ -180,7 +131,7 @@ function cell.callback (event, object)
     
     if event == "interact" then
         
-        if object.name == "door" and not cell.doorOpen then
+        if object.name == "door" and not object.open then
             slime:say("ego", "I am locked in this cell.")
         end
         
