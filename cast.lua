@@ -7,6 +7,8 @@ function cast.ego (x, y)
     
     -- The time between actor steps. More delay means slower steps.
     ego.movedelay = 0.05
+    
+    ego.speechcolor = {0, 255, 0}
 
     costumes.monster(ego)
     
@@ -16,6 +18,7 @@ end
 function cast.guard (x, y, name)
     local actor = slime:actor(name, x, y)
     actor.movedelay = 0.05
+    actor.speechcolor = {0, 0, 255}
     costumes.guard(actor)
 end
 

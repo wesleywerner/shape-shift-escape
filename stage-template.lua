@@ -3,8 +3,8 @@ local template = {}
 function template.setup (self)
 
     -- Hook into the slime callbacks
-    slime.callback = cell.onCallback
-    slime.animationLooped = cell.onAnimationLooped
+    slime.callback = template.onCallback
+    slime.animationLooped = template.onAnimationLooped
     
     -- Clear the stage
     slime:reset()
@@ -27,6 +27,10 @@ end
 function template.onCallback (event, object)
 
     slime:log(event .. " on " .. object.name)
+    
+    if (event == "moved" and object.name == "ego") then
+        slime:interact(object.clickedX, object.clickedY)
+    end
     
 end
 

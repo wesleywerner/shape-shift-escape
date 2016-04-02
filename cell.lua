@@ -37,7 +37,11 @@ function cell.setup (self)
         
     slime:say("ego", "I must get out of here!")
 
-    cell.pickUpDust()
+    --cell.pickUpDust()
+
+--    local chain = slime:chain()
+--    chain:wait(1)
+--    chain:func(game.warp, {game, hallway})
 
 end
 

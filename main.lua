@@ -3,6 +3,7 @@ helper = require("helper")
 cast = require("cast")
 costumes = require("costumes")
 cell = require("cell")
+hallway = require("hallway")
 game = {
     isbusy = false,
     bagY = 86
@@ -11,6 +12,7 @@ game = {
 
 -- Loads the given game stage
 function game.warp(self, stage)
+    self.lastStage = self.stage
     self.stage = stage
     stage:setup()
 end
@@ -32,7 +34,9 @@ function love.load ()
     slime.settings["speech font"] = love.graphics.newFont(8)
     slime.settings["status font"] = love.graphics.newFont(8)
     -- Load the first stage
-    game:warp(cell)
+    --game:warp(cell)
+    game.stage = cell
+    game:warp(hallway)
 end
 
 
