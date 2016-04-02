@@ -37,11 +37,12 @@ function template.animationLooped (actor, key, counter)
 end
 
 
-function template.moveTo (self, name)
+function template.moveTo (self, action, name)
     
     -- skip moving to these items
     local skip = {}
     skip.actorOrHotspotName = true
+    skip.onlyOnInteractActions = action == "interact"
     return not skip[name]
 
 end

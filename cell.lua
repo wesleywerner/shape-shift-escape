@@ -152,6 +152,10 @@ function cell.callback (event, object)
         if object.name == "exit" then
             cell.exitToHallway()
         end
+        
+        if object.name == "light" then
+            slime:say("ego", "It is locked")
+        end
     
     end
     
@@ -214,11 +218,12 @@ function cell.animationLooped (actor, key, counter)
 end
 
 
-function cell.moveTo (self, name)
+function cell.moveTo (self, action, name)
     
     -- skip moving to these items
     local skip = {}
-    skip.hole = true
+    skip.light = true
+    skip.hole = action == "interact"
     return not skip[name]
 
 end

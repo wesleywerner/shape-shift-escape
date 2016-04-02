@@ -109,10 +109,10 @@ function love.mousepressed (x, y, button)
                 if game.stage.moveTo then
                     local hasmoved = false
                     local objects = slime:getObjects(x, y)
+                    local action = slime.cursorName or "interact"
                     if objects then
                         for _, item in pairs(objects) do
-                            if game.stage:moveTo(item.name) then
-                                slime:log('allow move to ' .. item.name)
+                            if game.stage:moveTo(action, item.name) then
                                 hasmoved = true
                                 slime:moveActor("ego", x, y)    
                             end
