@@ -16,7 +16,7 @@ function template.setup (self)
     slime:layer("images/background.png", "images/layer.png", 50)
     
     -- Set the floor
-    slime:floor("images/floor-closed.png")
+    slime:floor("images/floor.png")
     
     -- Add our main actor
     cast.ego(70, 50)

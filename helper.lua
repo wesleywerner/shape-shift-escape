@@ -28,4 +28,11 @@ function helper.update (self, dt)
     end
 end
 
+
+-- Picks an item from a table
+function helper.pickone (self, words)
+    return words[math.random(#words)]
+end
+
+
 return helper

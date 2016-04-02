@@ -29,27 +29,24 @@ function hallway.setup (self)
     if game.lastStage == cell then
         cast.guard(120, 60, "guard")
         cast.ego(160, 60)
-        costumes.guard(slime.actors["ego"])
+--        costumes.guard(slime.actors["ego"])
 --        local chain = slime:chain()
---        chain:move("guard", {x=99, y=60});
---        chain:move("guard", {x=99, y=46});
+--        chain:move("guard", 99, 60);
+--        chain:move("guard", 99, 46);
 --        chain:wait(1)
 --        chain:func(slime.removeActor, {slime, "guard"})
---        chain:move("ego", {x=90, y=60})
+--        chain:move("ego", 90, 60)
 --        chain:turn("ego", "east")
 --        chain:wait(0.3)
 --        chain:turn("ego", "west")
 --        chain:wait(1)
 --        chain:say("ego", "That was close! But I am not out yet...")
 --        chain:func(game.unbusy)
-game:unbusy()
     end
     
     if game.lastStage == security then
-        
---        addCharacter (ego, 100, 45, egoShapeAnim() );
---        moveCharacter (ego, 100, 56);
---        turnCharacter (ego, WEST);
+        cast.ego(100, 45)
+        slime:moveActor("ego", 100, 56)
     end
     
     if game.lastStage == lab then
@@ -72,6 +69,8 @@ game:unbusy()
 --        moveCharacter (ego, 23, 56);
     end
 
+    game:unbusy()
+
 end
 
 
@@ -92,7 +91,7 @@ function hallway.onCallback (event, object)
             slime:say("ego", "Not looking like this, it will be suspicious!")
         else
             slime:log("warping")
-            --game:warp(securityroom)
+            game:warp(security)
         end
     end
     

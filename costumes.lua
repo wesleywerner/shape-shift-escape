@@ -69,7 +69,6 @@ function costumes.monster (actor)
         :frames({"26-37", 1})
         :delays(0.2)
         :sounds({[1] = "sounds/shapeshift.wav"})
-        --:offset(0, 0)
     
 end
 
@@ -157,5 +156,17 @@ function costumes.guardHandsUp (actor)
     
 end
 
+
+function costumes.guardUnconscious (actor)
+
+    local tiles = actor:tileset("images/guard.png", {w=12, h=14})
+    
+    local eastFrames = {1, 1}
+    local eastDelays = 10
+    
+    tiles:define("out"):frames(eastFrames):delays(eastDelays):flip()
+    actor.customAnimationKey = "out"
+    
+end
 
 return costumes

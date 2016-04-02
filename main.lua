@@ -4,7 +4,11 @@ cast = require("cast")
 costumes = require("costumes")
 cell = require("cell")
 hallway = require("hallway")
+security = require("security")
 game = {
+    egoshape = "monster",
+    scientistReceivedReport = false,
+    guardsKnockedOut = false,
     isbusy = false,
     bagY = 86
     }
@@ -29,14 +33,18 @@ end
 
 
 function love.load ()
+    math.randomseed(os.time())
     -- Nearest image interpolation (pixel graphics, no anti-aliasing)
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
     slime.settings["speech font"] = love.graphics.newFont(8)
     slime.settings["status font"] = love.graphics.newFont(8)
     -- Load the first stage
     --game:warp(cell)
+    
+    -- testing
+    game.egoshape = "guard"
     game.stage = cell
-    game:warp(hallway)
+    game:warp(security)
 end
 
 
@@ -77,6 +85,8 @@ end
 function love.keypressed (key, isrepeat)
     if key == "escape" then
         love.event.quit()
+    elseif key == "tab" then
+        slime.debug.enabled = not slime.debug.enabled
     end
 end
 
@@ -99,41 +109,41 @@ function love.mousepressed (x, y, button)
         -- The point is in our bag inventory area
         if (y > game.bagY) then
             local button = slime:getObjects(x, y)
-            if button then
+            if button and button[1].image then
                 local cursorSize = { button[1].image:getDimensions() }
                 slime:setCursor(button[1].name, button[1].image, scale, 
                     cursorSize[1]/2, cursorSize[2]/2)
             end
+        end
+            
+        if slime:someoneTalking() then
+            slime:skipSpeech()
         else
-            if slime:someoneTalking() then
-                slime:skipSpeech()
-            else
-                -- Check with the current stage if we should walk up
-                -- to an object first, or interact without movement
-                if game.stage.onMoveTo then
-                    local hasmoved = false
-                    local objects = slime:getObjects(x, y)
-                    local action = slime.cursorName or "interact"
-                    if objects then
-                        for _, item in pairs(objects) do
-                            if game.stage:onMoveTo(action, item.name) then
-                                hasmoved = true
-                                slime:moveActor("ego", x, y)    
-                            end
+            -- Check with the current stage if we should walk up
+            -- to an object first, or interact without movement
+            if game.stage.onMoveTo then
+                local hasmoved = false
+                local objects = slime:getObjects(x, y)
+                local action = slime.cursorName or "interact"
+                if objects then
+                    for _, item in pairs(objects) do
+                        if game.stage:onMoveTo(action, item.name) then
+                            hasmoved = true
+                            slime:moveActor("ego", x, y)    
                         end
-                    else
-                        -- no objects found, allow move
-                        slime:moveActor("ego", x, y)    
-                    end
-                    if not hasmoved then
-                        slime:interact(x, y)
                     end
                 else
-                    -- Move Ego then interact with any objects
-                    slime:moveActor("ego", x, y)
+                    -- no objects found, allow move
+                    slime:moveActor("ego", x, y)    
                 end
-                
+                if not hasmoved then
+                    slime:interact(x, y)
+                end
+            else
+                -- Move Ego then interact with any objects
+                slime:moveActor("ego", x, y)
             end
+            
         end
 
     end
