@@ -117,7 +117,7 @@ function costumes.guard(actor)
     tiles:define("talk south"):frames(southFrames):delays(southDelays)
     tiles:define("talk west"):frames(eastFrames):delays(eastDelays):flip()
     tiles:define("talk north"):frames(northFrames):delays(northDelays)
-    tiles:define("talk east"):frames(eastFrames):delays(eastDelaysu)
+    tiles:define("talk east"):frames(eastFrames):delays(eastDelays)
     
     -- Rub eyes
     eastFrames = {
