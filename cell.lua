@@ -2,7 +2,11 @@
 local cell = {}
 
 function cell.setup (self)
-
+    
+    -- Hook into the slime callbacks
+    slime.callback = cell.callback
+    slime.animationLooped = cell.animationLooped
+    
     -- Clear the stage
     slime:reset()
 
@@ -30,11 +34,7 @@ function cell.setup (self)
     bowl.x = 65
     bowl.y = 37
     bowl:setImage("images/bowl1.png")
-    
-    -- Hook into the slime callbacks
-    slime.callback = cell.callback
-    slime.animationLooped = cell.animationLooped
-    
+        
     slime:say("ego", "I must get out of here!")
 
     --cell.pickUpDust()
