@@ -37,7 +37,7 @@ function cell.setup (self)
         
     slime:say("ego", "I must get out of here!")
 
-    --cell.pickUpDust()
+    cell.pickUpDust()
 
 end
 
@@ -223,7 +223,8 @@ function cell.onMoveTo (self, action, name)
     -- skip moving to these items
     local skip = {}
     skip.light = true
-    skip.hole = action == "interact"
+    skip["guard 1"] = action == "cement dust"
+    skip["guard 2"] = action == "cement dust"
     return not skip[name]
 
 end
@@ -261,44 +262,45 @@ function cell.throwDust ()
     
     -- begin dialogue
     chain:wait(1)
-    chain:say("guard 2", "OH CRAP...")
+    chain:say("guard 1", "OH CRAP...")
     chain:turn("guard 2", "west")
 
-    chain:say("guard 1", "IT'S HIM! HE'S THE MONSTER!")
+    chain:say("guard 2", "IT'S HIM! HE'S THE MONSTER!")
     chain:say("ego", "NO, HE IS THE MONSTER!")
-    chain:say("guard 1", "NO! I AM A GUARD!")
-    chain:say("ego", "I AM A GUARD!")
-    chain:say("guard 2", "ONE OF YOU IS THE MONSTER...")
-    chain:say("guard 2", "LUCKILY WE HAVE DEVISED A QUESTION IF THIS EVER HAPPENED!")
     chain:turn("guard 2", "east")
-    chain:say("guard 2", "YOU!...")    
-    chain:say("ego", "ME?")
-    chain:say("guard 2", "YES YOU... WHAT DOES 5, 7, 11 AND 13 HAVE IN COMMON?")
-    chain:say("ego", "THEY ARE ALL... UM... NUMBERS?")
-    chain:say("guard 2", "CORRECT! THAT MEANS THE OTHER ONE IS THE MONSTER!")
+    chain:say("guard 2", "NO! I AM A GUARD!")
+    chain:say("ego", "I AM A GUARD!")
+    chain:say("guard 1", "ONE OF YOU IS THE MONSTER...")
+    chain:say("guard 1", "LUCKILY WE HAVE DEVISED A QUESTION IF THIS EVER HAPPENED!")
     chain:turn("guard 2", "west")
-    chain:say("guard 1", "NO! I AM THE REAL GUARD!")
-    chain:say("guard 2", "EXACTLY WHAT A MONSTER WOULD SAY!")
+    chain:say("guard 1", "YOU!...")    
+    chain:say("ego", "ME?")
+    chain:say("guard 1", "YES YOU... WHAT DOES 5, 7, 11 AND 13 HAVE IN COMMON?")
+    chain:say("ego", "THEY ARE ALL... UM... NUMBERS?")
+    chain:say("guard 1", "CORRECT! THAT MEANS THE OTHER ONE IS THE MONSTER!")
+    chain:turn("guard 2", "south")
+    chain:say("guard 2", "NO! I AM THE REAL GUARD!")
+    chain:say("guard 1", "EXACTLY WHAT A MONSTER WOULD SAY!")
 
     -- walks up to other guard
-    chain:move("guard 2", {x=50, y=45})
-    chain:turn("guard 2", "east")
-    chain:say("guard 2", "MOVE IT!")
+    chain:move("guard 1", {x=50, y=45})
+    chain:turn("guard 1", "east")
+    chain:say("guard 1", "MOVE IT!")
     
     -- puts hands up
-    chain:func(costumes.guardHandsUp, {slime.actors["guard 1"]})
-    chain:move("guard 1", {x=85, y=46})
-    chain:move("guard 2", {x=68, y=52})
-    chain:turn("guard 1", "west")
+    chain:func(costumes.guardHandsUp, {slime.actors["guard 2"]})
+    chain:move("guard 2", {x=85, y=46})
+    chain:move("guard 1", {x=68, y=52})
+    chain:turn("guard 2", "west")
 
     -- move ego around
     chain:move("ego", {x=47, y=44})
     chain:turn("ego", "east")
     
-    chain:say("guard 1", "YOU'RE MAKING A MISTAKE!")
+    chain:say("guard 2", "YOU'RE MAKING A MISTAKE!")
     chain:say("ego", "I DON'T THINK SO! LOCK THAT MONSTER AWAY, GUARD!")
-    chain:say("guard 2", "MY PLEASURE!")
-    chain:say("guard 2", "GO TELL THE SCIENTISTS OF THIS INCIDENT.")
+    chain:say("guard 1", "MY PLEASURE!")
+    chain:say("guard 1", "GO TELL THE SCIENTISTS OF THIS INCIDENT.")
     chain:say("ego", "RIGHT.")
     
     chain:func(game.unbusy)
@@ -312,10 +314,10 @@ function cell.exitToHallway()
         local chain = slime:chain()
         game.busy()
         if game.egoshape == "guard" then
-            chain:move("guard 2", {x=10, y=45})
+            chain:move("guard 1", {x=30, y=46})
             chain:func(cell.closeCellDoor)
             chain:wait(1)
-            chain:say("guard 1", "CRAP.")
+            chain:say("guard 2", "CRAP.")
             chain:wait(3)
             --chain:func(game.warp, {game, hallway})
         else

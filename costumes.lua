@@ -7,7 +7,7 @@ function costumes.monster (actor)
     
     tiles:define("throw dust")
         :frames({"1-12", 1})
-        :delays(0.1)
+        :delays(0.05)
         :sounds({[1] = "sounds/dust.wav"})
         :offset(-10, 0)
         :flip()
