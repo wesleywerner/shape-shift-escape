@@ -3,8 +3,8 @@ local template = {}
 function template.setup (self)
 
     -- Hook into the slime callbacks
-    slime.callback = cell.callback
-    slime.animationLooped = cell.animationLooped
+    slime.callback = cell.onCallback
+    slime.animationLooped = cell.onAnimationLooped
     
     -- Clear the stage
     slime:reset()
@@ -24,20 +24,20 @@ function template.setup (self)
 end
 
 
-function template.callback (event, object)
+function template.onCallback (event, object)
 
     slime:log(event .. " on " .. object.name)
     
 end
 
 
-function template.animationLooped (actor, key, counter)
+function template.onAnimationLooped (actor, key, counter)
     
     
 end
 
 
-function template.moveTo (self, action, name)
+function template.onMoveTo (self, action, name)
     
     -- skip moving to these items
     local skip = {}

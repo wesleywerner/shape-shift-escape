@@ -4,8 +4,8 @@ local cell = {}
 function cell.setup (self)
     
     -- Hook into the slime callbacks
-    slime.callback = cell.callback
-    slime.animationLooped = cell.animationLooped
+    slime.callback = cell.onCallback
+    slime.animationLooped = cell.onAnimationLooped
     
     -- Clear the stage
     slime:reset()
@@ -121,7 +121,7 @@ function cell.addFallingDustActor ()
 end
 
 
-function cell.callback (event, object)
+function cell.onCallback (event, object)
 
     slime:log(event .. " on " .. object.name)
 
@@ -183,7 +183,7 @@ function cell.callback (event, object)
 end
 
 
-function cell.animationLooped (actor, key, counter)
+function cell.onAnimationLooped (actor, key, counter)
     
     if actor == "door" then
         
@@ -218,7 +218,7 @@ function cell.animationLooped (actor, key, counter)
 end
 
 
-function cell.moveTo (self, action, name)
+function cell.onMoveTo (self, action, name)
     
     -- skip moving to these items
     local skip = {}

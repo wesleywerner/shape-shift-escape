@@ -106,13 +106,13 @@ function love.mousepressed (x, y, button)
             else
                 -- Check with the current stage if we should walk up
                 -- to an object first, or interact without movement
-                if game.stage.moveTo then
+                if game.stage.onMoveTo then
                     local hasmoved = false
                     local objects = slime:getObjects(x, y)
                     local action = slime.cursorName or "interact"
                     if objects then
                         for _, item in pairs(objects) do
-                            if game.stage:moveTo(action, item.name) then
+                            if game.stage:onMoveTo(action, item.name) then
                                 hasmoved = true
                                 slime:moveActor("ego", x, y)    
                             end
