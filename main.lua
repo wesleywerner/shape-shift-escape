@@ -5,10 +5,12 @@ costumes = require("costumes")
 cell = require("cell")
 hallway = require("hallway")
 security = require("security")
+lab = require("lab")
 game = {
     egoshape = "monster",
     scientistReceivedReport = false,
     guardsKnockedOut = false,
+    takenKnockoutGas = false,
     isbusy = false,
     bagY = 86
     }
@@ -33,6 +35,7 @@ end
 
 
 function love.load ()
+    if arg[#arg] == "-debug" then require("mobdebug").start() end
     math.randomseed(os.time())
     -- Nearest image interpolation (pixel graphics, no anti-aliasing)
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
@@ -43,8 +46,8 @@ function love.load ()
     
     -- testing
     game.egoshape = "guard"
-    game.stage = cell
-    game:warp(security)
+    game.stage = hallway
+    game:warp(lab)
 end
 
 

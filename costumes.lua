@@ -169,4 +169,64 @@ function costumes.guardUnconscious (actor)
     
 end
 
+
+function costumes.scientist (actor)
+
+    local tiles = actor:tileset("images/scientist.png", {w=12, h=18})
+    
+    -- Idle animation
+    -- The idle animation plays when the actor is not walking or talking:
+    -- a simple two-frame animation: Open eyes, and blink.
+    
+    local southFrames = {'11-10', 1}
+    local southDelays = {3, 0.2}
+    local eastFrames = {'3-2', 1}
+    local eastDelays = {3, 0.2}
+    local northFrames = {18, 1}
+    local northDelays = 1
+    
+    tiles:define("idle south"):frames(southFrames):delays(southDelays)
+    tiles:define("idle west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("idle north"):frames(northFrames):delays(northDelays)
+    tiles:define("idle east"):frames(eastFrames):delays(eastDelays)
+
+    -- Walk animation
+    southFrames = {'11-14', 1}
+    southDelays = 0.2
+    eastFrames = {'6-3', 1}
+    eastDelays = 0.2
+    northFrames = {'18-21', 1}
+    northDelays = 0.2
+    
+    tiles:define("walk south"):frames(southFrames):delays(southDelays)
+    tiles:define("walk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("walk north"):frames(northFrames):delays(northDelays)
+    tiles:define("walk east"):frames(eastFrames):delays(eastDelays)
+
+    -- Talk animation
+    southFrames = {'15-17', 1}
+    southDelays = 0.2
+    eastFrames = {'7-9', 1}
+    eastDelays = 0.2
+    northFrames = {'15-17', 1}
+    northDelays = 0.2
+
+    tiles:define("talk south"):frames(southFrames):delays(southDelays)
+    tiles:define("talk west"):frames(eastFrames):delays(eastDelays):flip()
+    tiles:define("talk north"):frames(northFrames):delays(northDelays)
+    tiles:define("talk east"):frames(eastFrames):delays(eastDelays)
+    
+    -- Work Animation
+    southFrames = {'22-34', 1, '33-23', 1}
+    southDelays = 0.1 + math.random(10) / 100
+    tiles:define("work"):frames(southFrames):delays(southDelays)
+    
+    -- Look Around
+    southFrames = {35,1,  22,1,  36,1,  22,1}
+    southDelays = 1
+    tiles:define("look"):frames(southFrames):delays(southDelays)
+
+end
+
+
 return costumes

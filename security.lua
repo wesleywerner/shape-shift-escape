@@ -51,8 +51,6 @@ function security.setup (self)
     security.moveGuardInSecurityRoom()
     security.guardSaysRandomThing()
     
-    security.popKnockoutGas()
-    
 end
 
 

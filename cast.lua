@@ -30,6 +30,14 @@ function cast.guard (x, y, name)
 end
 
 
+function cast.scientist (x, y, name)
+    local actor = slime:actor(name, x, y)
+    costumes.scientist(actor)
+    return actor
+end
+
+
+
 function cast.door (x, y, name)
 
     local door = slime:actor(name, x, y)
