@@ -213,6 +213,17 @@ function cell.animationLooped (actor, key, counter)
     
 end
 
+
+function cell.moveTo (self, name)
+    
+    -- skip moving to these items
+    local skip = {}
+    skip.hole = true
+    return not skip[name]
+
+end
+
+
 function cell.throwDust ()
     
     game.egoshape = "guard"

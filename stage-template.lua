@@ -37,4 +37,14 @@ function template.animationLooped (actor, key, counter)
 end
 
 
+function template.moveTo (self, name)
+    
+    -- skip moving to these items
+    local skip = {}
+    skip.actorOrHotspotName = true
+    return not skip[name]
+
+end
+
+
 return template

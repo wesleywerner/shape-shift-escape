@@ -104,10 +104,31 @@ function love.mousepressed (x, y, button)
             if slime:someoneTalking() then
                 slime:skipSpeech()
             else
-                -- Move Ego then interact with any objects
-                --if not slime:interact(x, y) then
+                -- Check with the current stage if we should walk up
+                -- to an object first, or interact without movement
+                if game.stage.moveTo then
+                    local hasmoved = false
+                    local objects = slime:getObjects(x, y)
+                    if objects then
+                        for _, item in pairs(objects) do
+                            if game.stage:moveTo(item.name) then
+                                slime:log('allow move to ' .. item.name)
+                                hasmoved = true
+                                slime:moveActor("ego", x, y)    
+                            end
+                        end
+                    else
+                        -- no objects found, allow move
+                        slime:moveActor("ego", x, y)    
+                    end
+                    if not hasmoved then
+                        slime:interact(x, y)
+                    end
+                else
+                    -- Move Ego then interact with any objects
                     slime:moveActor("ego", x, y)
-                --end
+                end
+                
             end
         end
 
