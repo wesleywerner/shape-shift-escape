@@ -48,7 +48,7 @@ end
 
 function cell.openCellDoor ()
     
-    local door = slime.actors["door"]
+    local door = slime:getActor("door")
     door.open = true
     game.busy()
     
@@ -100,7 +100,7 @@ function cell.pickUpSpoon ()
     slime:bagInsert("ego", { ["name"] = "bowl", ["image"] = "images/bowl2.png" })
     slime:bagInsert("ego", { ["name"] = "spoon", ["image"] = "images/spoon.png" })
     -- Remove the bowl and spoon actor from the stage
-    slime.actors["bowl and spoon"] = nil    
+    slime:removeActor("bowl and spoon")
 end
 
 
@@ -214,7 +214,7 @@ function cell.onAnimationLooped (actor, key, counter)
             slime:setAnimation("ego", nil)
         end
         if key == "shift to guard" then
-            costumes.guard(slime.actors["ego"])
+            costumes.guard(slime:getActor("ego"))
             slime:setAnimation("ego", nil)
         end
     end
@@ -292,7 +292,7 @@ function cell.throwDust ()
     chain:say("guard 1", "MOVE IT!")
     
     -- puts hands up
-    chain:func(costumes.guardHandsUp, {slime.actors["guard 2"]})
+    chain:func(costumes.guardHandsUp, {slime:getActor("guard 2")})
     chain:move("guard 2", 85, 46)
     chain:move("guard 1", 68, 52)
     chain:turn("guard 2", "west")
@@ -323,13 +323,13 @@ function cell.exitToHallway()
             chain:wait(1)
             chain:say("guard 2", "CRAP.")
             chain:wait(3)
-            --chain:func(game.warp, {game, hallway})
+            chain:func(game.warp, {game, hallway})
         else
             chain:move("guard 2", 30, 46)
             chain:move("guard 1", 30, 46)
             chain:func(cell.closeCellDoor)
             chain:wait(0.5)
-            --chain:func(game.warp, {game, fail})
+            chain:func(game.warp, {game, fail})
         end
     end
 end
