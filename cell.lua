@@ -27,10 +27,11 @@ function cell.setup (self)
     
     -- Hole in the wall
     local x, y, width, height = 92, 23, 8, 8
-    slime:hotspot("hole", x, y, width, height)
+    local hole = slime:hotspot("hole", x, y, width, height)
 
     -- Bowl and spoon
     local bowl = slime:actor("bowl and spoon")
+    --bowl.cursor = 4
     bowl.x = 65
     bowl.y = 37
     bowl:setImage("images/bowl1.png")

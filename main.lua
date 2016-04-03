@@ -24,6 +24,13 @@ game = {
 inventoryTakeSound = nil
 inventoryUseSound = nil
 
+-- Cursors
+POINT = 1
+LOOK = 2
+TALK = 3
+TAKE = 4
+BUSY = 5
+    
 -- Loads the given game stage
 function game.warp(self, stage)
     self.lastStage = self.stage
@@ -34,13 +41,13 @@ end
 
 function game.busy()
     game.isbusy = true
-    slime:useCursor(5)
+    slime:useCursor(BUSY)
 end
 
 
 function game.unbusy()
     game.isbusy = false
-    slime:useCursor(1)
+    slime:useCursor(POINT)
 end
 
 
@@ -69,7 +76,7 @@ function love.load ()
     love.audio.play(gameMusic)
     
     -- Load cursors
-    local cursorHotspots = { {x=4, y=4}, {x=4, y=3}, {x=2, y=6} }
+    local cursorHotspots = { {x=4, y=4}, {x=4, y=3}, {x=2, y=6}, {x=3, y=3} }
     local cursorNames = {"interact", "look", "talk", "take", "busy" }
     slime:loadCursors("images/cursors.png", 12, 12, cursorNames, cursorHotspots)
     slime:useCursor(1)
@@ -77,19 +84,19 @@ function love.load ()
     love.mouse.setVisible(false)
     
     -- Load the first stage
-    --game:warp(intro)
+    game:warp(intro)
     
     -- testing
-    local bagitem = {
-        ["name"] = "security card",
-        ["image"] = "images/security-pass-inventory.png"
-        }
-    slime:bagInsert("ego", bagitem)
+--    local bagitem = {
+--        ["name"] = "security card",
+--        ["image"] = "images/security-pass-inventory.png"
+--        }
+--    slime:bagInsert("ego", bagitem)
     
 --    game.scientistReceivedReport = true
 --    game.egoshape = "guard"
 --    game.stage = hallway
-    game:warp(exithallway)
+    --game:warp(exithallway)
 end
 
 
@@ -108,6 +115,9 @@ function love.update (dt)
     
     slime:update(dt)
     
+    -- reset cursor
+    slime:useCursor(game.isbusy and BUSY or POINT)
+    
     -- display hover over objects
     local x, y = love.mouse.getPosition()
     -- Adjust for scale
@@ -119,6 +129,10 @@ function love.update (dt)
         for _, hoverobject in pairs(objects) do
             if hoverobject.name ~= "ego" then
                 items = string.format("%s %s", hoverobject.name, items)
+                -- hover over cursor
+                if hoverobject.cursor then
+                    slime:useCursor(hoverobject.cursor)
+                end
             end
         end
         slime:status(items)
