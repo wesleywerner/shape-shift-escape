@@ -23,7 +23,7 @@ function cell.setup (self)
     cast.ego(70, 50)
     
     -- Add the cell door
-    cast.door(50, 49, "door")
+    cast:door(50, 41, "door")
     
     -- Hole in the wall
     local x, y, width, height = 92, 23, 8, 8

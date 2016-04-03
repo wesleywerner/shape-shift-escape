@@ -7,6 +7,7 @@ hallway = require("hallway")
 security = require("security")
 lab = require("lab")
 storage = require("storage")
+exithallway = require("exit-hallway")
 shapeshift = require("shapeshift")
 game = {
     egoshape = "monster",
@@ -66,10 +67,16 @@ function love.load ()
     --game:warp(cell)
     
     -- testing
+    local bagitem = {
+        ["name"] = "security card",
+        ["image"] = "images/security-pass-inventory.png"
+        }
+    slime:bagInsert("ego", bagitem)
+    
     game.scientistReceivedReport = true
     game.egoshape = "guard"
     game.stage = hallway
-    game:warp(storage)
+    game:warp(exithallway)
 end
 
 

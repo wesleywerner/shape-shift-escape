@@ -57,18 +57,11 @@ function hallway.setup (self)
     if game.lastStage == storage then
         cast.ego(23, 46)
         slime:moveActor("ego", 23, 56)
-        
---        addCharacter (ego, 23, 46, egoShapeAnim() );
---        moveCharacter (ego, 23, 56);
---        turnCharacter (ego, EAST);
     end
     
     if game.lastStage == exithallway then
         cast.ego(10, 56)
         slime:moveActor("ego", 23, 56)
-    
---        addCharacter (ego, 0, 56, egoShapeAnim() );
---        moveCharacter (ego, 23, 56);
     end
 
     game:unbusy()

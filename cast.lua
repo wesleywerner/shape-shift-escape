@@ -41,7 +41,7 @@ end
 
 
 
-function cast.door (x, y, name)
+function cast.door (self, x, y, name)
 
     local door = slime:actor(name, x, y)
 
@@ -61,26 +61,30 @@ function cast.door (x, y, name)
         :frames(closingFrames)
         :delays(delay)
         :sounds(soundFrames)
+        :offset(0, 8)
     tiles
         :define("closed")
         :frames(closedFrame)
         :delays(10)
+        :offset(0, 8)
     tiles
         :define("opening")
         :frames(openingFrames)
         :delays(delay)
         :sounds(soundFrames)
+        :offset(0, 8)
     tiles
         :define("open")
         :frames(closingFrames)
         :delays(10)
-
+        :offset(0, 8)
+    
     -- Start off closed
     door.open = false
     slime:setAnimation("door", "closed")
     
     -- Create a light above the door
-    local light = slime:actor("light", x-1, y-30)
+    local light = slime:actor("light", x-1, y-21)
     light.nozbuffer = true
     light:setImage("images/cell-light-red.png")
 
