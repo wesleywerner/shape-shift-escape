@@ -47,6 +47,11 @@ function exithallway.onCallback (event, object)
         end
     end
     
+    if object.name == "Hallway" then
+        game:warp(hallway)
+    end
+    
+    
 end
 
 

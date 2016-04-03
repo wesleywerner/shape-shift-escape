@@ -2,6 +2,7 @@ slime = require("slime")
 helper = require("helper")
 cast = require("cast")
 costumes = require("costumes")
+intro = require("intro")
 cell = require("cell")
 hallway = require("hallway")
 security = require("security")
@@ -20,8 +21,8 @@ game = {
     isbusy = false,
     bagY = 86
     }
-speech = nil
-
+inventoryTakeSound = nil
+inventoryUseSound = nil
 
 -- Loads the given game stage
 function game.warp(self, stage)
@@ -33,11 +34,13 @@ end
 
 function game.busy()
     game.isbusy = true
+    slime:useCursor(5)
 end
 
 
 function game.unbusy()
     game.isbusy = false
+    slime:useCursor(1)
 end
 
 
@@ -59,14 +62,22 @@ function love.load ()
     slime.settings["walk and talk"] = true
     slime.settings["builtin text"] = true
     
-    -- Hook into the speech draw call
-    slime.onDrawSpeechCallback = onDrawSpeech
+    inventoryTakeSound = love.audio.newSource("sounds/take.wav", "static")
+    inventoryUseSound = love.audio.newSource("sounds/inventory-pick.wav", "static")
+    gameMusic = love.audio.newSource("sounds/bu-a-lively-cheese.it", "static")
+    gameMusic:setLooping(true)
+    love.audio.play(gameMusic)
     
-    -- Speech font
-    speechfont = love.graphics.newFont(20)
+    -- Load cursors
+    local cursorHotspots = { {x=4, y=4}, {x=4, y=3}, {x=2, y=6} }
+    local cursorNames = {"interact", "look", "talk", "take", "busy" }
+    slime:loadCursors("images/cursors.png", 12, 12, cursorNames, cursorHotspots)
+    slime:useCursor(1)
+    
+    love.mouse.setVisible(false)
     
     -- Load the first stage
-    --game:warp(cell)
+    --game:warp(intro)
     
     -- testing
     local bagitem = {
@@ -75,9 +86,9 @@ function love.load ()
         }
     slime:bagInsert("ego", bagitem)
     
-    game.scientistReceivedReport = true
-    game.egoshape = "guard"
-    game.stage = hallway
+--    game.scientistReceivedReport = true
+--    game.egoshape = "guard"
+--    game.stage = hallway
     game:warp(exithallway)
 end
 
@@ -87,7 +98,6 @@ function love.draw ()
     love.graphics.scale(scale)
     slime:draw(scale)
     love.graphics.pop()
-    drawSpeech()
     slime:debugdraw()
 end
 
@@ -148,8 +158,12 @@ function love.mousepressed (x, y, button)
             local button = slime:getObjects(x, y)
             if button and button[1].image then
                 local cursorSize = { button[1].image:getDimensions() }
-                slime:setCursor(button[1].name, button[1].image, scale, 
-                    cursorSize[1]/2, cursorSize[2]/2)
+                slime:setCursor(
+                    button[1].name,
+                    button[1].image, 
+                    {x=cursorSize[1]/2, y=cursorSize[2]/2}
+                    )
+                love.audio.play(inventoryUseSound)
             end
         end
             
@@ -201,27 +215,6 @@ function slime.inventoryChanged (bag)
         slime:bagButton(item.name, item.image, xpos, game.bagY)
         xpos = xpos + item.image:getWidth() + 4
     end
+    love.audio.play(inventoryTakeSound)
 end
 
-
-function onDrawSpeech (self, actorX, actorY, speechcolor, words)
-    speech = {actorX=actorX, actorY=actorY, speechcolor=speechcolor, words=words}
-end
-
-
-function drawSpeech ()
-    if speech then
-        local x = speech.actorX * scale
-        local y = speech.actorY * scale
-        love.graphics.push()
-        -- black border
-        love.graphics.setColor({0, 0, 0, 255})
-        love.graphics.printf(speech.words, x+2, y - 98, 200, "left")
-        
-        love.graphics.setColor(speech.speechcolor)
-        love.graphics.setFont(speechfont)
-        love.graphics.printf(speech.words, x, y - 100, 200, "left")
-        love.graphics.setColor({255, 255, 255, 255})
-        love.graphics.pop()
-    end
-end

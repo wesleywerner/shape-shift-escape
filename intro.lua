@@ -1,14 +1,14 @@
-local fail = {}
+local intro = {}
 
-function fail.setup (self)
+function intro.setup (self)
 
     -- Hook into the slime callbacks
-    slime.callback = fail.onCallback
-    slime.animationLooped = fail.onAnimationLooped
+    slime.callback = intro.onCallback
+    slime.animationLooped = intro.onAnimationLooped
     
     -- Clear the stage
     slime:reset()
-
+    
     local extraextra = love.audio.newSource("sounds/extraextra.wav", "static")
     love.audio.play(extraextra)
 
@@ -24,33 +24,33 @@ function fail.setup (self)
     slime:background("images/newspaper5.png", n)
     slime:background("images/newspaper4.png", n)
     slime:background("images/newspaper3.png", n)
-    slime:background("images/newspaper-failed.png", 6)
-    slime:background("images/end-thanks.png", 600)
+    slime:background("images/newspaper-start.png", 600)
     
-    local actor = slime:actor("Retry", 10, 80)
+    local actor = slime:actor("play", 150, 80)
     actor:setImage("images/monster-button.png")
-    
     
 end
 
 
-function fail.onCallback (event, object)
+function intro.onCallback (event, object)
 
-    if object.name == "Retry" then
-        game:warp(intro)
+    if object.name == "play" then
+        game:warp(cell)
     end
     
 end
 
 
-function fail.onAnimationLooped (actor, key, counter)
+function intro.onAnimationLooped (actor, key, counter)
+    
     
 end
 
 
-function fail.onMoveTo (self, action, name)
+function intro.onMoveTo (self, action, name)
+    
 
 end
 
 
-return fail
+return intro
