@@ -9,6 +9,8 @@ function cast.ego (x, y)
     ego.movedelay = 0.05
     
     ego.speechcolor = {64, 255, 64}
+    
+    costumes:addShapeShiftOutifts(ego)
 
     if game.egoshape == "guard" then
         costumes.guard(ego)
@@ -159,6 +161,35 @@ function cast.gas (x, y)
         :delays(0.1)
         :sounds({[2] = "sounds/knockout-gas.wav"})
     actor.customAnimationKey = "explode"
+end
+
+
+function cast.janitor (self, x, y)
+    local actor = slime:actor("Tired Janitor", x, y)
+    local tileset = actor:tileset("images/janitor.png", {w=12, h=18})
+    tileset:define("sleep")
+        :frames({'1-2', 1})
+        :delays(1)
+    slime:setAnimation("Tired Janitor", "sleep")
+    return actor
+end
+
+
+function cast.monsterButton (self, x, y)
+    local actor = slime:actor("Shape-shift Yourself", x, y)
+    actor:setImage("images/monster-button.png")
+end
+
+
+function cast.guardButton (self, x, y)
+    local actor = slime:actor("Shape-shift Guard", x, y)
+    actor:setImage("images/guard-button.png")
+end
+
+
+function cast.scientistButton (self, x, y)
+    local actor = slime:actor("Shape-shift Scientist", x, y)
+    actor:setImage("images/scientist-button.png")
 end
 
 

@@ -6,11 +6,14 @@ cell = require("cell")
 hallway = require("hallway")
 security = require("security")
 lab = require("lab")
+storage = require("storage")
+shapeshift = require("shapeshift")
 game = {
     egoshape = "monster",
     scientistReceivedReport = false,
     guardsKnockedOut = false,
     takenKnockoutGas = false,
+    firstStoreVisit = true,
     isbusy = false,
     bagY = 86
     }
@@ -63,9 +66,10 @@ function love.load ()
     --game:warp(cell)
     
     -- testing
+    game.scientistReceivedReport = true
     game.egoshape = "guard"
     game.stage = hallway
-    game:warp(lab)
+    game:warp(storage)
 end
 
 

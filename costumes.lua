@@ -64,11 +64,11 @@ function costumes.monster (actor)
         :sounds({[1] = "sounds/dig.wav"})
         :flip()
     
-    -- Shape shift to a guard
-    tiles:define("shift to guard")
-        :frames({"26-37", 1})
-        :delays(0.2)
-        :sounds({[1] = "sounds/shapeshift.wav"})
+--    -- Shape shift to a guard
+--    tiles:define("shift to guard")
+--        :frames({"26-37", 1})
+--        :delays(0.2)
+--        :sounds({[2] = "sounds/shapeshift.wav"})
     
 end
 
@@ -227,6 +227,40 @@ function costumes.scientist (actor)
     tiles:define("look"):frames(southFrames):delays(southDelays)
 
 end
+
+
+-- Adds the shape shift outfits to the actor
+function costumes.addShapeShiftOutifts (self, actor)
+    
+    tiles = actor:tileset("images/ego.png", {w=12, h=12})
+    
+    tiles:define("shift from guard")
+        :frames({'37-26', 1})
+        :delays(0.1)
+        --:offset(0, 2)
+        :sounds({[2] = "sounds/shapeshift.wav"})
+    
+    tiles:define("shift to guard")
+        :frames({'26-37', 1})
+        :delays(0.1)
+        :sounds({[2] = "sounds/shapeshift.wav"})
+    
+    tiles = actor:tileset("images/scientist-shift.png", {w=12, h=18})
+    
+    tiles:define("shift from scientist")
+        :frames({'17-1', 1})
+        :delays(0.1)
+        :sounds({[2] = "sounds/shapeshift.wav"})
+    
+    tiles:define("shift to scientist")
+        :frames({'1-17', 1})
+        :delays(0.1)
+        --:offset(0, -6)
+        :sounds({[2] = "sounds/shapeshift.wav"})
+
+    
+end
+
 
 
 return costumes
