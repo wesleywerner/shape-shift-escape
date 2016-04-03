@@ -39,10 +39,6 @@ function cell.setup (self)
 
     --cell.pickUpDust()
 
---    local chain = slime:chain()
---    chain:wait(1)
---    chain:func(game.warp, {game, hallway})
-
 end
 
 
@@ -325,10 +321,12 @@ function cell.exitToHallway()
             chain:wait(3)
             chain:func(game.warp, {game, hallway})
         else
+            -- clear bag
+            slime.bagButtons = { }
             chain:move("guard 2", 30, 46)
             chain:move("guard 1", 30, 46)
             chain:func(cell.closeCellDoor)
-            chain:wait(0.5)
+            chain:wait(4)
             chain:func(game.warp, {game, fail})
         end
     end

@@ -81,7 +81,8 @@ end
 
 
 function exithallway.openDoor (self)
-    slime:bagRemove("ego", "security card")
+    -- clear bag
+    slime.bagButtons = { }
     game:busy()
     slime:setCursor()
     local chain = slime:chain()
@@ -105,7 +106,7 @@ function exithallway.openDoor (self)
     chain:sound("sounds/unlock.wav")
     -- done
     chain:wait(4)
-    chain:func(game.warp, {game, winstage})
+    chain:func(game.warp, {game, win})
     
 end
 
