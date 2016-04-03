@@ -14,6 +14,7 @@ game = {
     isbusy = false,
     bagY = 86
     }
+speech = nil
 
 
 -- Loads the given game stage
@@ -35,13 +36,29 @@ end
 
 
 function love.load ()
-    if arg[#arg] == "-debug" then require("mobdebug").start() end
+    
+    -- enable debugging
+    --if arg[#arg] == "-debug" then require("mobdebug").start() end
+    
+    -- Random seed
     math.randomseed(os.time())
+    
     -- Nearest image interpolation (pixel graphics, no anti-aliasing)
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+    
+    -- Slime settings
     slime.settings["speech font"] = love.graphics.newFont(8)
+    slime.settings["speech position"] = 80
     slime.settings["status font"] = love.graphics.newFont(8)
     slime.settings["walk and talk"] = true
+    slime.settings["builtin text"] = true
+    
+    -- Hook into the speech draw call
+    slime.onDrawSpeechCallback = onDrawSpeech
+    
+    -- Speech font
+    speechfont = love.graphics.newFont(20)
+    
     -- Load the first stage
     --game:warp(cell)
     
@@ -57,6 +74,7 @@ function love.draw ()
     love.graphics.scale(scale)
     slime:draw(scale)
     love.graphics.pop()
+    drawSpeech()
     slime:debugdraw()
 end
 
@@ -76,7 +94,9 @@ function love.update (dt)
     if objects then
         local items = ''
         for _, hoverobject in pairs(objects) do
-            items = string.format("%s %s", hoverobject.name, items)
+            if hoverobject.name ~= "ego" then
+                items = string.format("%s %s", hoverobject.name, items)
+            end
         end
         slime:status(items)
     else
@@ -167,5 +187,28 @@ function slime.inventoryChanged (bag)
     for counter, item in pairs(slime:bagContents("ego")) do
         slime:bagButton(item.name, item.image, xpos, game.bagY)
         xpos = xpos + item.image:getWidth() + 4
+    end
+end
+
+
+function onDrawSpeech (self, actorX, actorY, speechcolor, words)
+    speech = {actorX=actorX, actorY=actorY, speechcolor=speechcolor, words=words}
+end
+
+
+function drawSpeech ()
+    if speech then
+        local x = speech.actorX * scale
+        local y = speech.actorY * scale
+        love.graphics.push()
+        -- black border
+        love.graphics.setColor({0, 0, 0, 255})
+        love.graphics.printf(speech.words, x+2, y - 98, 200, "left")
+        
+        love.graphics.setColor(speech.speechcolor)
+        love.graphics.setFont(speechfont)
+        love.graphics.printf(speech.words, x, y - 100, 200, "left")
+        love.graphics.setColor({255, 255, 255, 255})
+        love.graphics.pop()
     end
 end
