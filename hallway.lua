@@ -29,19 +29,19 @@ function hallway.setup (self)
     if game.lastStage == cell then
         cast.guard(120, 60, "guard")
         cast.ego(160, 60)
---        costumes.guard(slime.actors["ego"])
---        local chain = slime:chain()
---        chain:move("guard", 99, 60);
---        chain:move("guard", 99, 46);
---        chain:wait(1)
---        chain:func(slime.removeActor, {slime, "guard"})
---        chain:move("ego", 90, 60)
---        chain:turn("ego", "east")
---        chain:wait(0.3)
---        chain:turn("ego", "west")
---        chain:wait(1)
---        chain:say("ego", "That was close! But I am not out yet...")
---        chain:func(game.unbusy)
+        costumes.guard(slime.actors["ego"])
+        local chain = slime:chain()
+        chain:move("guard", 99, 60);
+        chain:move("guard", 99, 46);
+        chain:wait(1)
+        chain:func(slime.removeActor, {slime, "guard"})
+        chain:move("ego", 90, 60)
+        chain:turn("ego", "east")
+        chain:wait(0.3)
+        chain:turn("ego", "west")
+        chain:wait(1)
+        chain:say("ego", "That was close! But I am not out yet...")
+        chain:func(game.unbusy)
     end
     
     if game.lastStage == security then
@@ -50,13 +50,13 @@ function hallway.setup (self)
     end
     
     if game.lastStage == lab then
-        
---        addCharacter (ego, 62, 46, egoShapeAnim() );
---        moveCharacter (ego, 62, 56);
---        turnCharacter (ego, EAST);
+        cast.ego(62, 46)
+        slime:moveActor("ego", 62, 56)
     end
     
     if game.lastStage == storage then
+        cast.ego(23, 46)
+        slime:moveActor("ego", 23, 56)
         
 --        addCharacter (ego, 23, 46, egoShapeAnim() );
 --        moveCharacter (ego, 23, 56);
@@ -64,7 +64,9 @@ function hallway.setup (self)
     end
     
     if game.lastStage == exithallway then
-        
+        cast.ego(10, 56)
+        slime:moveActor("ego", 23, 56)
+    
 --        addCharacter (ego, 0, 56, egoShapeAnim() );
 --        moveCharacter (ego, 23, 56);
     end
@@ -97,17 +99,17 @@ function hallway.onCallback (event, object)
     
     if object.name == "lab" then
         slime:log("warping")
-        --game:warp(lab)
+        game:warp(lab)
     end
 
     if object.name == "storage" then
         slime:log("warping")
-        --game:warp(lab)
+        game:warp(storage)
     end
 
     if object.name == "exit" then
         slime:log("warping")
-        --game:warp(lab)
+        game:warp(exithallway)
     end
 
 end

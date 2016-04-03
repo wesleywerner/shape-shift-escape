@@ -41,6 +41,7 @@ function love.load ()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
     slime.settings["speech font"] = love.graphics.newFont(8)
     slime.settings["status font"] = love.graphics.newFont(8)
+    slime.settings["walk and talk"] = true
     -- Load the first stage
     --game:warp(cell)
     

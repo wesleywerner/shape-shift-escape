@@ -32,6 +32,7 @@ end
 
 function cast.scientist (x, y, name)
     local actor = slime:actor(name, x, y)
+    actor.movedelay = 0.05
     costumes.scientist(actor)
     return actor
 end

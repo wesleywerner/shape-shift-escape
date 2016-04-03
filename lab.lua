@@ -1,5 +1,6 @@
 local lab = {}
 
+
 function lab.setup (self)
 
     -- Hook into the slime callbacks
@@ -50,6 +51,9 @@ function lab.setup (self)
     cast.ego(14, 46)
     slime:moveActor("ego", 36, 46)
     
+    lab:moveScientistOne()
+    lab:moveScientistThree()
+    
 end
 
 
@@ -59,6 +63,29 @@ function lab.onCallback (event, object)
     
     if (event == "moved" and object.name == "ego") then
         slime:interact(object.clickedX, object.clickedY)
+    end
+    
+    if object.name == "exit" then
+        game:warp(hallway)
+    end
+    
+    if object.name == "Knockout Gas" then
+        lab:takeBottle()
+    end
+    
+    if object.name == "scientist two" then
+        if game.egoshape == "guard" then
+            if (game.scientistReceivedReport) then
+                slime:say("ego", "Best I don't attract attention.")
+            else
+                game.scientistReceivedReport = true
+                slime:stopActor("ego")
+                slime:say("ego", "Scientist Sir...")
+                slime:say("scientist two", "What?")
+                slime:say("ego", "Err, reporting a near prisoner escape.")
+                slime:say("scientist two", "Very well.")
+            end
+        end
     end
     
 end
@@ -78,65 +105,83 @@ function lab.onAnimationLooped (actor, key, counter)
         end
     end
     
-    
 end
 
 
 function lab.onMoveTo (self, action, name)
     -- skip moving to these items
     local skip = {}
-    skip.actorOrHotspotName = true
+    skip["scientist two"] = true
     skip.onlyOnInteractActions = action == "interact"
     return not skip[name]
 end
 
 
-function lab.moveScientistOne (self)
+function lab.moveScientistOne ()
     
---    while (currentRoom == labRoom)
---    {
---        pause (200);
---        moveCharacter (scientistOne, 46, 60);
---        pause (50);
---        if (somethingSpeaking () == NULL)
---        {
---            say (scientistOne, pickOne (
---                "how curious!",
---                "interesting!",
---                "fascinating!"
---                ) );
---        }
---        moveCharacter (scientistOne, 63, 44);
---        turnCharacter (scientistOne, SOUTH);
---        animate (scientistOne, scientistWorkAnim() );
---    }
+    if not game.stage == lab then return end
+    
+    local chain = slime:chain()
+    
+    chain:wait(5 + math.random(10))
+    chain:move("scientist one", 30 + math.random(40), 60)
+    chain:anim("scientist one", "look", true)
+    chain:say("scientist one", 
+        helper:pickone({
+        "how curious!",
+        "interesting!",
+        "fascinating!"
+        }))
+    chain:move("scientist one", 63, 44)
+    chain:turn("scientist one", "south")
+    chain:anim("scientist one", "work")
+    chain:func(lab.moveScientistOne)
 
 end
 
 
-function lab.moveScientistThree (self)
+function lab.moveScientistThree ()
     
---    while (currentRoom == labRoom)
---    {
---        moveCharacter (scientistThree, 113, 60);
---        pause (45);
---        if (somethingSpeaking () == NULL)
---        {
---            say (scientistThree, pickOne (
---                "how curious!",
---                "interesting!",
---                "fascinating!"
---                ) );
---        }
---        moveCharacter (scientistThree, 60, 60);
---        turnCharacter (scientistThree, SOUTH);
---        pause (75);
---        moveCharacter (scientistThree, 124, 44);
---        turnCharacter (scientistThree, SOUTH);
---        animate (scientistThree, scientistWorkAnim() );
---        pause (450);
---    }
+    if not game.stage == lab then return end
 
+    local chain = slime:chain()
+    
+    chain:wait(5 + math.random(10))
+    chain:move("scientist three", 113, 60)
+    chain:anim("scientist three", "look", true)
+    chain:say("scientist three", 
+        helper:pickone({
+        "how curious!",
+        "interesting!",
+        "fascinating!"
+    }))
+    if (math.random(100) < 5) then
+        chain:move("scientist three", 75, 60)
+        chain:turn("scientist three", "south")
+        chain:wait(2)
+    end
+    chain:move("scientist three", 124, 44)
+    chain:turn("scientist three", "south")
+    chain:anim("scientist three", "work")
+    chain:func(lab.moveScientistThree)
+
+end
+
+
+function lab.takeBottle (self)
+    
+    if game.egoshape == "guard" then
+        slime:say("scientist two", "Don't touch that! It is a knockout gas.");
+        slime:say("scientist two", "If it drops we will all go unconscious!");
+    end
+    
+    if game.egoshape == "scientist" then
+        game.takenKnockoutGas = true
+        local item = { ["name"] = "Gas", image = "images/knockout-gas-bottle.png" }
+        slime:bagInsert("ego", item)
+        slime:removeActor("Knockout Gas")
+    end
+    
 end
 
 
