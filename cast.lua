@@ -100,8 +100,8 @@ function cast.securitymonitor (x, y, display)
             :define("display")
             :frames({'7-11', 1, '10-8', 1})
             :delays(0.3)
-        actor.base = {0, 0}
         slime:setAnimation("game screen", "display")
+        actor.base = {0, 0}
     end
     
     if display == "rooms" then
@@ -111,8 +111,8 @@ function cast.securitymonitor (x, y, display)
             :define("display")
             :frames({'1-3', 1})
             :delays(2.7)
-        actor.base = {0, 0}
         slime:setAnimation("security screen", "display")
+        actor.base = {0, 0}
     end
 
     if display == "text" then
@@ -122,8 +122,8 @@ function cast.securitymonitor (x, y, display)
             :define("display")
             :frames({'4-6', 1})
             :delays(0.5)
-        actor.base = {0, 0}
         slime:setAnimation("text screen", "display")
+        actor.base = {0, 0}
     end
 
 end
