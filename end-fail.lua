@@ -27,16 +27,17 @@ function fail.setup (self)
     slime:background("images/newspaper-failed.png", 6)
     slime:background("images/end-thanks.png", 600)
     
-    local actor = slime:actor("Retry", 10, 80)
+    local actor = slime:actor("retry", 10, 80)
     actor:setImage("images/monster-button.png")
     
+    game:unbusy()
     
 end
 
 
 function fail.onCallback (event, object)
 
-    if object.name == "Retry" then
+    if object.name == "retry" then
         game:warp(intro)
     end
     
