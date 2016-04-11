@@ -8,7 +8,7 @@ function fail.setup (self)
     
     -- Clear the stage
     slime:reset()
-
+    
     local extraextra = love.audio.newSource("sounds/extraextra.wav", "static")
     love.audio.play(extraextra)
 
@@ -30,6 +30,8 @@ function fail.setup (self)
     local actor = slime:actor("retry", 10, 80)
     actor:setImage("images/monster-button.png")
     
+    game:reset()
+
     game:unbusy()
     
 end
