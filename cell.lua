@@ -38,8 +38,6 @@ function cell.setup (self)
         
     slime:say("ego", "I must get out of here!")
 
-    --cell.pickUpDust()
-
 end
 
 
@@ -105,7 +103,7 @@ end
 function cell.pickUpDust ()
     slime:bagInsert("ego", 
         { ["name"] = "cement dust", ["image"] = "images/inv-dust.png" })
-    slime:removeActor("falling dust")
+    slime:removeActor("dust")
     local chain = slime:chain()
     chain:say("ego", "This dust can blind eyeballs for a short time.")
     chain:func(cell.openCellDoor)
@@ -114,11 +112,11 @@ end
 
 -- Creates an animation of falling dust where ego digs into the wall
 function cell.addFallingDustActor ()
-    local actor = slime:actor("falling dust", 96, 34)
+    local actor = slime:actor("dust", 96, 34)
     local tiles = actor:tileset("images/dust.png", {w=5, h=6})
     tiles:define("fall"):frames({'1-14', 1}):delays(0.2)
     tiles:define("still"):frames({14, 1}):delays(10)
-    slime:setAnimation("falling dust", "fall")
+    slime:setAnimation("dust", "fall")
 end
 
 
@@ -146,7 +144,7 @@ function cell.onCallback (event, object)
             slime:say("ego", "It looks like somebody tried digging here.")
         end
         
-        if object.name == "falling dust" then
+        if object.name == "dust" then
             cell.pickUpDust()
         end
         
@@ -165,8 +163,9 @@ function cell.onCallback (event, object)
             slime:say("ego", "The spoon won't open this door")
         end
         if object.name == "hole" then
-            if not cell.dug then
-                cell.dug = true
+            local dustOnFloor = slime:getActor('dust')
+            local egoCarriesDust = slime:bagContains('ego', 'cement dust')
+            if not egoCarriesDust and not dustOnFloor then
                 game.busy()
                 slime:turnActor("ego", "east")
                 slime:setAnimation("ego", "dig")
@@ -200,8 +199,8 @@ function cell.onAnimationLooped (actor, key, counter)
         
     end
     
-    if actor == "falling dust" and key == "fall" then
-        slime:setAnimation("falling dust", "still")
+    if actor == "dust" and key == "fall" then
+        slime:setAnimation("dust", "still")
         slime:setAnimation("ego", nil)
         game.unbusy()
     end
@@ -224,8 +223,8 @@ function cell.onMoveTo (self, action, name)
     -- skip moving to these items
     local skip = {}
     skip.light = true
-    skip["guard 1"] = action == "cement dust"
-    skip["guard 2"] = action == "cement dust"
+    skip["guard 1"] = true
+    skip["guard 2"] = true
     return not skip[name]
 
 end
