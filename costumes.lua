@@ -9,7 +9,7 @@ function costumes.monster (actor)
         :frames({"1-12", 1})
         :delays(0.05)
         :sounds({[1] = "sounds/dust.wav"})
-        :offset(-10, 0)
+        :offset(-5, 0)
         :flip()
 
     -- create a new animation pack for ego using a tileset of 12x12 frames
