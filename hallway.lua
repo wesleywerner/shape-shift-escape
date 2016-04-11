@@ -29,7 +29,7 @@ function hallway.setup (self)
     if game.lastStage == cell then
         cast.guard(120, 60, "guard")
         cast.ego(160, 60)
-        costumes.guard(slime.actors["ego"])
+        costumes.guard(slime:getActor("ego"))
         local chain = slime:chain()
         chain:move("guard", 99, 60);
         chain:move("guard", 99, 46);
