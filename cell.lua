@@ -30,14 +30,11 @@ function cell.setup (self)
     local hole = slime:hotspot("hole", x, y, width, height)
 
     -- Bowl and spoon
-    local bowl = slime:actor("bowl and spoon")
-    --bowl.cursor = 4
-    bowl.x = 65
-    bowl.y = 37
+    local bowl = slime:actor("bowl and spoon", 65, 37)
     bowl:setImage("images/bowl1.png")
         
     slime:say("ego", "I must get out of here!")
-
+    
 end
 
 
