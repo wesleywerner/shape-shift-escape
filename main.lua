@@ -30,6 +30,17 @@ LOOK = 2
 TALK = 3
 TAKE = 4
 BUSY = 5
+
+function game.reset (self)
+    slime.bags['ego'] = {}
+    game.egoshape = 'monser'
+    game.scientistReceivedReport = false
+    game.guardsKnockedOut = false
+    game.takenKnockoutGas = false
+    game.firstStoreVisit = true
+    game.isbusy = false
+end
+
     
 -- Loads the given game stage
 function game.warp(self, stage)
@@ -64,7 +75,7 @@ function love.load ()
     
     -- Slime settings
     slime.settings["speech font"] = love.graphics.newFont(8)
-    slime.settings["speech position"] = 80
+    slime.settings["speech position"] = 4
     slime.settings["status font"] = love.graphics.newFont(8)
     slime.settings["walk and talk"] = true
     slime.settings["builtin text"] = true
