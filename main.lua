@@ -66,6 +66,7 @@ function love.load ()
     
     -- enable debugging
     --if arg[#arg] == "-debug" then require("mobdebug").start() end
+    slime.debug.enabled = false
     
     -- Random seed
     math.randomseed(os.time())
@@ -104,10 +105,14 @@ function love.load ()
 --        }
 --    slime:bagInsert("ego", bagitem)
     
+--    game.takenKnockoutGas = true
+--    local item = { ["name"] = "Gas", image = "images/knockout-gas-bottle.png" }
+--    slime:bagInsert("ego", item)
+
 --    game.scientistReceivedReport = true
 --    game.egoshape = "guard"
 --    game.stage = hallway
-    --game:warp(exithallway)
+--    game:warp(security)
 end
 
 
