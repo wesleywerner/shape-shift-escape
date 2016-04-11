@@ -105,7 +105,7 @@ function security.onCallback (event, object)
         end
     end
     
-    if event == "knockout gas" then
+    if event == "Gas" then
         if object.name == "busy guard" or object.name == "lazy guard" then
            security:popKnockoutGas() 
         end
@@ -218,8 +218,8 @@ function security.popKnockoutGas (self)
     costumes.guardUnconscious(guard)
     guard = cast.guard(115, 61, "sleeping guard")
     costumes.guardUnconscious(guard)
-    
-    slime:bagRemove("ego", "knockout gas")
+    slime:setCursor()
+    slime:bagRemove("ego", "Gas")
 
 end
 
