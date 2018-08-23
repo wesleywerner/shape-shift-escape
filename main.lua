@@ -181,7 +181,7 @@ function love.mousepressed (x, y, button)
     y = math.floor(y / scale)
 
     -- Left mouse button
-    if button == "l" then
+    if button == 1 then
     
         -- The point is in our bag inventory area
         if (y > game.bagY) then
