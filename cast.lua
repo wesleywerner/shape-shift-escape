@@ -4,12 +4,12 @@ function cast.ego (x, y)
 
     -- Add an actor named "ego"
     local ego = slime:actor("ego", x, y)
-    
+
     -- The time between actor steps. More delay means slower steps.
     ego.movedelay = 0.05
-    
-    ego.speechcolor = {64, 255, 64}
-    
+
+    ego.speechcolor = {64/255, 255/255, 64/255}
+
     costumes:addShapeShiftOutifts(ego)
 
     if game.egoshape == "guard" then
@@ -19,14 +19,14 @@ function cast.ego (x, y)
     else
         costumes.monster(ego)
     end
-    
+
 end
 
 
 function cast.guard (x, y, name)
     local actor = slime:actor(name, x, y)
     actor.movedelay = 0.05
-    actor.speechcolor = {64, 64, 255}
+    actor.speechcolor = {64/255, 64/255, 255/255}
     costumes.guard(actor)
     return actor
 end
@@ -34,6 +34,7 @@ end
 
 function cast.scientist (x, y, name)
     local actor = slime:actor(name, x, y)
+    actor.speechcolor = {1, 1, 0}
     actor.movedelay = 0.05
     costumes.scientist(actor)
     return actor
@@ -54,7 +55,7 @@ function cast.door (self, x, y, name)
     local openingFrames = {"1-31", 1}
     local closingFrames = {"31-1", 1}
     local soundFrames = {[2] = "sounds/celldooropen.wav"}
-    
+
     local tiles = door:tileset("images/cell-door.png", {w=9, h=30})
     tiles
         :define("closing")
@@ -78,11 +79,11 @@ function cast.door (self, x, y, name)
         :frames(closingFrames)
         :delays(10)
         :offset(0, 8)
-    
+
     -- Start off closed
     door.open = false
     slime:setAnimation("door", "closed")
-    
+
     -- Create a light above the door
     local light = slime:actor("light", x-1, y-21)
     light.nozbuffer = true
@@ -92,7 +93,7 @@ end
 
 
 function cast.securitymonitor (x, y, display)
-        
+
     if display == "pong" then
         local actor = slime:actor("game screen", x, y)
         local tiles = actor:tileset("images/securitymonitor.png", {w=10, h=17})
@@ -103,7 +104,7 @@ function cast.securitymonitor (x, y, display)
         slime:setAnimation("game screen", "display")
         actor.base = {0, 0}
     end
-    
+
     if display == "rooms" then
         local actor = slime:actor("security screen", x, y)
         local tiles = actor:tileset("images/securitymonitor.png", {w=10, h=17})
@@ -148,7 +149,7 @@ function cast.spiltcoffee (x, y)
     local tileset = actor:tileset("images/coffee.png", {w=6, h=10})
     tileset:define("steam"):frames({3, 1}):delays(10)
     actor.customAnimationKey = "steam"
-    
+
     actor = slime:actor("A big mess", x, y)
     tileset = actor:tileset("images/coffee-spill.png", {w=7, h=19})
     tileset:define("drip"):frames({'1-8', 1}):delays(0.2)
